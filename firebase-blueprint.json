@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "PetDetails": {
+      "title": "PetDetails",
+      "description": "Details about the pet owner's companion animal",
+      "type": "object",
+      "properties": {
+        "petName": {
+          "type": "string",
+          "description": "Name of the pet (1-60 chars)"
+        },
+        "petType": {
+          "type": "string",
+          "enum": ["Dog", "Cat", "Bird", "Other"],
+          "description": "Category of the pet"
+        },
+        "petBreed": {
+          "type": "string",
+          "description": "Breed of the pet (1-80 chars)"
+        },
+        "petAge": {
+          "type": "string",
+          "description": "Age of the pet (1-30 chars)"
+        },
+        "petGender": {
+          "type": "string",
+          "enum": ["Male", "Female", "Unknown"],
+          "description": "Gender of the pet"
+        }
+      },
+      "required": ["petName", "petType", "petBreed", "petAge", "petGender"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Pet owner personal profile, contact details, and embedded petDetails",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Owner full name (2-80 chars)"
+        },
+        "email": {
+          "type": "string",
+          "description": "Owner contact email (3-120 chars)"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Owner phone number (7-25 chars)"
+        },
+        "address": {
+          "type": "string",
+          "description": "Owner street address (3-160 chars)"
+        },
+        "city": {
+          "type": "string",
+          "description": "Owner city (2-80 chars)"
+        },
+        "state": {
+          "type": "string",
+          "description": "Owner state (2-80 chars)"
+        },
+        "petDetails": {
+          "$ref": "#/entities/PetDetails",
+          "description": "Nested map holding the owner's pet details"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when registered (FieldValue.serverTimestamp())"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())"
+        }
+      },
+      "required": [
+        "userId",
+        "fullName",
+        "email",
+        "phoneNumber",
+        "address",
+        "city",
+        "state",
+        "petDetails",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Private pet owner and pet profile documents isolated per authenticated userId"
+    }
+  }
+}

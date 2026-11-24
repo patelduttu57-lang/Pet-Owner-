@@ -1,0 +1,31 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-android-pawcare-2a8411f6-a6f1-489d-a6a9-6d6eaf19b5d9",
+      "rules": "firestore.rules"
+    }
+  ],
+  "hosting": {
+    "public": "web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "firestore": {
+      "host": "127.0.0.1",
+      "port": 8085
+    },
+    "ui": {
+      "enabled": false
+    }
+  }
+}

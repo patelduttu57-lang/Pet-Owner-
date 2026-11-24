@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawCare — Pet Owner Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/jpeg" href="./assets/pawcare_app_icon.jpg" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="config-banner" class="config-banner hidden">
+    <strong>Firebase Web Setup Needed:</strong> Register a Web App in Firebase Console for project
+    <code>gen-lang-client-0678804709</code> and paste your <code>appId</code> in
+    <code>web/firebase-config.js</code> before signing in.
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand-link" data-nav="home">
+        <span class="brand-badge" aria-hidden="true">🐾</span>
+        <span>
+          <span class="brand-title">PawCare</span>
+          <span class="brand-sub">Pet Owner Portal</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#home" class="nav-link" data-section="home">Home</a>
+        <a href="#about" class="nav-link" data-section="about">About Us</a>
+        <a href="#services" class="nav-link" data-section="services">Services</a>
+        <a href="#pet-care" class="nav-link" data-section="pet-care">Pet Care</a>
+        <a href="#contact" class="nav-link" data-section="contact">Contact Us</a>
+      </nav>
+
+      <div class="nav-actions" id="nav-actions-guest">
+        <button type="button" class="btn btn-outline-green" id="nav-login-btn">Login</button>
+        <button type="button" class="btn btn-orange" id="nav-register-btn">Register</button>
+      </div>
+
+      <div class="nav-actions hidden" id="nav-actions-auth">
+        <button type="button" class="btn btn-primary" id="nav-dashboard-btn">Dashboard</button>
+        <button type="button" class="btn btn-outline-green" id="nav-logout-btn">Logout</button>
+      </div>
+
+      <button type="button" class="menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
+    </div>
+
+    <div class="mobile-drawer hidden" id="mobile-drawer">
+      <a href="#home" class="nav-link" data-section="home">Home</a>
+      <a href="#about" class="nav-link" data-section="about">About Us</a>
+      <a href="#services" class="nav-link" data-section="services">Services</a>
+      <a href="#pet-care" class="nav-link" data-section="pet-care">Pet Care</a>
+      <a href="#contact" class="nav-link" data-section="contact">Contact Us</a>
+      <div class="mobile-drawer-actions" id="mobile-actions-guest">
+        <button type="button" class="btn btn-outline-green btn-full" id="mobile-login-btn">Login</button>
+        <button type="button" class="btn btn-orange btn-full" id="mobile-register-btn">Register</button>
+      </div>
+      <div class="mobile-drawer-actions hidden" id="mobile-actions-auth">
+        <button type="button" class="btn btn-primary btn-full" id="mobile-dashboard-btn">Dashboard</button>
+        <button type="button" class="btn btn-outline-green btn-full" id="mobile-logout-btn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PUBLIC HOMEPAGE VIEW (DEFAULT LANDING PAGE) -->
+  <main id="view-homepage">
+    <!-- Home Hero Section -->
+    <section id="home" class="section-block">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <span class="pill-tag orange">Trusted Pet Owner Registry</span>
+            <h1>Every Pet Deserves Organized, Loving Care.</h1>
+            <p>
+              PawCare connects pet families with digital companion profiles, emergency contact
+              readiness, and practical species-specific care guides — synced live between web and Android.
+            </p>
+            <div class="hero-cta-row" id="hero-guest-cta">
+              <button type="button" class="btn btn-orange" id="hero-register-btn">Register Your Pet</button>
+              <button type="button" class="btn btn-outline-green" id="hero-login-btn">Owner Login</button>
+            </div>
+            <div class="hero-cta-row hidden" id="hero-auth-cta">
+              <button type="button" class="btn btn-primary" id="hero-dashboard-btn">Open My Dashboard</button>
+            </div>
+          </div>
+          <img
+            src="./assets/img_hero_pets.jpg"
+            alt="Happy dog, cat, and songbird cared for with PawCare"
+            class="hero-art"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="section-block">
+      <div class="container">
+        <div class="card two-col">
+          <img
+            src="./assets/img_about_care.jpg"
+            alt="Pet owner caring for dog and cat at home"
+            class="section-art"
+          />
+          <div>
+            <span class="pill-tag">About PawCare</span>
+            <h2 class="section-heading">Built Around Peace of Mind for Pet Families</h2>
+            <p class="muted">
+              Whether you share your home with an energetic puppy, a curious tabby, or a singing parrot,
+              PawCare keeps your contact details and companion records accurate, private, and synced
+              across your browser and Android devices.
+            </p>
+            <ul class="highlight-list">
+              <li><span class="check-dot">✓</span> Owner-isolated Cloud Firestore profiles</li>
+              <li><span class="check-dot">✓</span> Tailored records for Dogs, Cats, Birds &amp; More</li>
+              <li><span class="check-dot">✓</span> Zero plain-text passwords stored in the database</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section-block">
+      <div class="container">
+        <span class="pill-tag orange">Our Services</span>
+        <h2 class="section-heading">Everything Pet Owners Need in One Place</h2>
+        <div class="services-grid">
+          <article class="service-card">
+            <div class="service-icon green">🐾</div>
+            <div>
+              <div class="service-badge">Core Registry</div>
+              <h3>Pet Profile Registry</h3>
+              <p class="muted">Maintain breed, age, species, and gender details in one clean digital companion card.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div class="service-icon orange">🏠</div>
+            <div>
+              <div class="service-badge orange">Always Accessible</div>
+              <h3>Owner Contact Vault</h3>
+              <p class="muted">Keep phone numbers and residential addresses current for clinics, sitters, and emergencies.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div class="service-icon green">🩺</div>
+            <div>
+              <div class="service-badge">Preventive Care</div>
+              <h3>Wellness Checklists</h3>
+              <p class="muted">Guidance for annual vet checkups, dental hygiene, vaccinations, and parasite prevention.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div class="service-icon orange">🔄</div>
+            <div>
+              <div class="service-badge orange">Cross-Platform Sync</div>
+              <h3>Real-Time Cloud Sync</h3>
+              <p class="muted">Updates made in Chrome appear immediately in the PawCare Android app and vice versa.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pet Care Information Section -->
+    <section id="pet-care" class="section-block">
+      <div class="container">
+        <div class="card care-card">
+          <span class="pill-tag">Pet Care Information</span>
+          <h2 class="section-heading">Species-Specific Care Guides</h2>
+
+          <div class="tab-row" role="tablist" aria-label="Pet Species Care Guides">
+            <button type="button" class="tab-btn active" data-species="Dog">Dog</button>
+            <button type="button" class="tab-btn" data-species="Cat">Cat</button>
+            <button type="button" class="tab-btn" data-species="Bird">Bird</button>
+            <button type="button" class="tab-btn" data-species="Other">Other</button>
+          </div>
+
+          <div class="two-col">
+            <img
+              src="./assets/img_pet_care_guide.jpg"
+              alt="Pet nutrition bowl, stethoscope, and ID tag illustration"
+              class="section-art"
+            />
+            <div class="care-detail-panel" id="care-detail-panel">
+              <h3 id="care-title">Canine Daily Wellness &amp; Exercise</h3>
+              <p id="care-summary" class="muted"></p>
+              <ul id="care-bullets" class="care-bullets"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="section-block">
+      <div class="container">
+        <div class="card">
+          <span class="pill-tag orange">Contact Us</span>
+          <h2 class="section-heading">We're Here for Every Tail Wag &amp; Purr</h2>
+
+          <div class="contact-grid">
+            <div class="contact-info-list">
+              <div class="contact-info-item">
+                <div class="contact-icon-box">📍</div>
+                <div>
+                  <div class="detail-label">Care Center</div>
+                  <div class="detail-value">420 Meadowbrook Way, Suite 12, Portland, OR</div>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-icon-box">✉️</div>
+                <div>
+                  <div class="detail-label">Support Email</div>
+                  <div class="detail-value">care@pawcareportal.org</div>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-icon-box">📞</div>
+                <div>
+                  <div class="detail-label">Pet Owner Helpline</div>
+                  <div class="detail-value">+1 (503) 555-0194</div>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-icon-box">🕒</div>
+                <div>
+                  <div class="detail-label">Support Hours</div>
+                  <div class="detail-value">Mon – Sat • 8:00 AM – 7:00 PM</div>
+                </div>
+              </div>
+            </div>
+
+            <form id="contact-form" class="form-stack" novalidate>
+              <h3>Send a Quick Inquiry</h3>
+              <div id="contact-success" class="alert alert-success hidden">
+                Thank you! Our pet care team has received your inquiry.
+              </div>
+              <div class="field-group">
+                <label for="contact-name">Your Name</label>
+                <input id="contact-name" type="text" placeholder="Alex Rivera" />
+                <span class="field-error" id="err-contact-name"></span>
+              </div>
+              <div class="field-group">
+                <label for="contact-email">Email Address</label>
+                <input id="contact-email" type="email" placeholder="alex@example.com" />
+                <span class="field-error" id="err-contact-email"></span>
+              </div>
+              <div class="field-group">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" rows="3" placeholder="How can we help you and your pet?"></textarea>
+                <span class="field-error" id="err-contact-message"></span>
+              </div>
+              <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div>
+          <strong>PawCare</strong> — Pet Owner Management System (Web &amp; Android)
+        </div>
+        <div>
+          <a href="#home" class="btn btn-text">Back to Top</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- LOGIN VIEW -->
+  <section id="view-login" class="centered-page hidden">
+    <div class="card auth-card">
+      <button type="button" class="btn btn-text" data-back-home>← Back to Homepage</button>
+      <div style="margin: 10px 0 18px;">
+        <span class="pill-tag">Member Access</span>
+        <h2 class="section-heading">Welcome Back to PawCare</h2>
+        <p class="muted">
+          Sign in with your Google account (same account as your Android app) or Email &amp; Password.
+        </p>
+      </div>
+
+      <div id="login-alert" class="alert alert-error hidden" style="margin-bottom: 14px;"></div>
+      <div id="login-info" class="alert alert-success hidden" style="margin-bottom: 14px;"></div>
+
+      <button type="button" class="btn btn-primary btn-full" id="login-google-btn">
+        Sign in with Google
+      </button>
+
+      <div class="divider-text">or sign in with email</div>
+
+      <form id="login-email-form" class="form-stack" novalidate>
+        <div class="field-group">
+          <label for="login-email">Email Address</label>
+          <input id="login-email" type="email" placeholder="you@example.com" autocomplete="email" />
+          <span class="field-error" id="err-login-email"></span>
+        </div>
+        <div class="field-group">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password" />
+          <span class="field-error" id="err-login-password"></span>
+        </div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button type="button" class="btn btn-text" id="forgot-password-btn">Forgot password?</button>
+        </div>
+        <button type="submit" class="btn btn-outline-green btn-full" id="login-email-submit">
+          Login with Email
+        </button>
+      </form>
+
+      <div class="divider-text">New pet owner?</div>
+      <button type="button" class="btn btn-outline-orange btn-full" id="login-to-register-btn">
+        Create an Account &amp; Register Pet
+      </button>
+    </div>
+  </section>
+
+  <!-- REGISTRATION VIEW -->
+  <section id="view-register" class="centered-page hidden">
+    <div class="card register-card">
+      <button type="button" class="btn btn-text" data-back-home>← Back to Homepage</button>
+      <div style="margin: 10px 0 18px;">
+        <span class="pill-tag orange" id="register-badge">New Member Registration</span>
+        <h2 class="section-heading" id="register-heading">Register as a PawCare Pet Owner</h2>
+        <p class="muted">
+          Enter your personal details and pet companion profile. Your data syncs live across Web and Android.
+        </p>
+      </div>
+
+      <div id="register-alert" class="alert alert-error hidden" style="margin-bottom: 14px;"></div>
+
+      <form id="register-form" class="form-stack" novalidate>
+        <div class="subcard">
+          <h3>Owner Personal &amp; Contact Details</h3>
+          <div class="form-stack">
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="reg-full-name">Full Name</label>
+                <input id="reg-full-name" type="text" placeholder="Jordan Taylor" />
+                <span class="field-error" id="err-reg-full-name"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-email">Email Address</label>
+                <input id="reg-email" type="email" placeholder="jordan@example.com" />
+                <span class="field-error" id="err-reg-email"></span>
+              </div>
+            </div>
+
+            <div class="form-grid-2" id="reg-password-row">
+              <div class="field-group">
+                <label for="reg-password">Password (for Email Sign-Up)</label>
+                <input id="reg-password" type="password" placeholder="At least 6 characters" />
+                <span class="field-error" id="err-reg-password"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-confirm-password">Confirm Password</label>
+                <input id="reg-confirm-password" type="password" placeholder="Re-enter password" />
+                <span class="field-error" id="err-reg-confirm-password"></span>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="reg-phone">Phone Number</label>
+                <input id="reg-phone" type="tel" placeholder="+1 503-555-0188" />
+                <span class="field-error" id="err-reg-phone"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-address">Residential Address</label>
+                <input id="reg-address" type="text" placeholder="742 Evergreen Terrace" />
+                <span class="field-error" id="err-reg-address"></span>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="reg-city">City</label>
+                <input id="reg-city" type="text" placeholder="Portland" />
+                <span class="field-error" id="err-reg-city"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-state">State</label>
+                <input id="reg-state" type="text" placeholder="Oregon" />
+                <span class="field-error" id="err-reg-state"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subcard pet-subcard">
+          <h3>Pet Companion Details</h3>
+          <div class="form-stack">
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="reg-pet-name">Pet Name</label>
+                <input id="reg-pet-name" type="text" placeholder="Barnaby" />
+                <span class="field-error" id="err-reg-pet-name"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-pet-type">Pet Type</label>
+                <select id="reg-pet-type">
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Bird">Bird</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="reg-pet-breed">Pet Breed</label>
+                <input id="reg-pet-breed" type="text" placeholder="Golden Retriever" />
+                <span class="field-error" id="err-reg-pet-breed"></span>
+              </div>
+              <div class="field-group">
+                <label for="reg-pet-age">Pet Age</label>
+                <input id="reg-pet-age" type="text" placeholder="3 years" />
+                <span class="field-error" id="err-reg-pet-age"></span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="reg-pet-gender">Pet Gender</label>
+              <select id="reg-pet-gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-orange btn-full" id="register-google-btn">
+          Register &amp; Connect with Google
+        </button>
+
+        <button type="submit" class="btn btn-primary btn-full" id="register-email-btn">
+          Create Account with Email &amp; Password
+        </button>
+
+        <button type="button" class="btn btn-outline-green btn-full" id="register-to-login-btn">
+          Already have an account? Login
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- PROTECTED USER DASHBOARD VIEW -->
+  <section id="view-dashboard" class="section-block hidden">
+    <div class="container">
+      <div id="dashboard-feedback" class="alert hidden" style="margin-bottom: 16px;"></div>
+
+      <div class="dashboard-banner">
+        <img src="./assets/img_dashboard_banner.jpg" alt="" class="dashboard-banner-img" />
+        <div class="dashboard-banner-content">
+          <span class="pill-tag orange">Verified PawCare Member</span>
+          <h2 class="section-heading" id="dash-welcome-title">Welcome back!</h2>
+          <p class="muted" id="dash-welcome-subtitle"></p>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Owner Profile Card -->
+        <article class="card">
+          <div class="card-header-row">
+            <div>
+              <h3>Owner Profile</h3>
+              <span class="muted" style="font-size:0.84rem;">Personal &amp; Contact Info</span>
+            </div>
+            <button type="button" class="btn btn-outline-green" id="open-edit-owner-btn">Edit Profile</button>
+          </div>
+          <div class="detail-list">
+            <div class="detail-item">
+              <span class="detail-label">Full Name</span>
+              <span class="detail-value" id="dash-full-name">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email Address</span>
+              <span class="detail-value" id="dash-email">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone Number</span>
+              <span class="detail-value" id="dash-phone">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Residential Address</span>
+              <span class="detail-value" id="dash-address">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">City &amp; State</span>
+              <span class="detail-value" id="dash-city-state">—</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Pet Information Card -->
+        <article class="card">
+          <div class="card-header-row">
+            <div>
+              <h3>Pet Information</h3>
+              <span class="muted" style="font-size:0.84rem;" id="dash-pet-subtitle">Companion Card</span>
+            </div>
+            <button type="button" class="btn btn-orange" id="open-edit-pet-btn">Update Pet</button>
+          </div>
+          <div class="detail-list">
+            <div class="detail-item">
+              <span class="detail-label">Pet Name</span>
+              <span class="detail-value" id="dash-pet-name">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Pet Type</span>
+              <span class="detail-value" id="dash-pet-type">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Breed</span>
+              <span class="detail-value" id="dash-pet-breed">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Age</span>
+              <span class="detail-value" id="dash-pet-age">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Gender</span>
+              <span class="detail-value" id="dash-pet-gender">—</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Registered On</span>
+              <span class="detail-value" id="dash-created-at">—</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT OWNER MODAL -->
+  <div id="edit-owner-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-panel">
+      <h3>Edit Owner Profile</h3>
+      <form id="edit-owner-form" class="form-stack" style="margin-top: 14px;" novalidate>
+        <div class="field-group">
+          <label for="edit-full-name">Full Name</label>
+          <input id="edit-full-name" type="text" />
+          <span class="field-error" id="err-edit-full-name"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-email">Email Address</label>
+          <input id="edit-email" type="email" />
+          <span class="field-error" id="err-edit-email"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-phone">Phone Number</label>
+          <input id="edit-phone" type="tel" />
+          <span class="field-error" id="err-edit-phone"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-address">Residential Address</label>
+          <input id="edit-address" type="text" />
+          <span class="field-error" id="err-edit-address"></span>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label for="edit-city">City</label>
+            <input id="edit-city" type="text" />
+            <span class="field-error" id="err-edit-city"></span>
+          </div>
+          <div class="field-group">
+            <label for="edit-state">State</label>
+            <input id="edit-state" type="text" />
+            <span class="field-error" id="err-edit-state"></span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline-green" id="cancel-edit-owner-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-edit-owner-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT PET MODAL -->
+  <div id="edit-pet-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-panel">
+      <h3>Update Pet Details</h3>
+      <form id="edit-pet-form" class="form-stack" style="margin-top: 14px;" novalidate>
+        <div class="field-group">
+          <label for="edit-pet-name">Pet Name</label>
+          <input id="edit-pet-name" type="text" />
+          <span class="field-error" id="err-edit-pet-name"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-pet-type">Pet Type</label>
+          <select id="edit-pet-type">
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
+            <option value="Bird">Bird</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="edit-pet-breed">Pet Breed</label>
+          <input id="edit-pet-breed" type="text" />
+          <span class="field-error" id="err-edit-pet-breed"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-pet-age">Pet Age</label>
+          <input id="edit-pet-age" type="text" />
+          <span class="field-error" id="err-edit-pet-age"></span>
+        </div>
+        <div class="field-group">
+          <label for="edit-pet-gender">Pet Gender</label>
+          <select id="edit-pet-gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline-green" id="cancel-edit-pet-btn">Cancel</button>
+          <button type="submit" class="btn btn-orange" id="save-edit-pet-btn">Save Pet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

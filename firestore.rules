@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidPetDetails(pet) {
+      return pet is map &&
+             pet.keys().hasAll(['petName', 'petType', 'petBreed', 'petAge', 'petGender']) &&
+             pet.keys().hasOnly(['petName', 'petType', 'petBreed', 'petAge', 'petGender']) &&
+             pet.petName is string && pet.petName.size() >= 1 && pet.petName.size() <= 60 &&
+             pet.petType in ['Dog', 'Cat', 'Bird', 'Other'] &&
+             pet.petBreed is string && pet.petBreed.size() >= 1 && pet.petBreed.size() <= 80 &&
+             pet.petAge is string && pet.petAge.size() >= 1 && pet.petAge.size() <= 30 &&
+             pet.petGender in ['Male', 'Female', 'Unknown'];
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 80 &&
+             data.email is string && data.email.size() >= 3 && data.email.size() <= 120 &&
+             data.phoneNumber is string && data.phoneNumber.size() >= 7 && data.phoneNumber.size() <= 25 &&
+             data.address is string && data.address.size() >= 3 && data.address.size() <= 160 &&
+             data.city is string && data.city.size() >= 2 && data.city.size() <= 80 &&
+             data.state is string && data.state.size() >= 2 && data.state.size() <= 80 &&
+             isValidPetDetails(data.petDetails) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      // PII Protection: only the authenticated owner can read their own profile document; no collection listing
+      allow get: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+      allow list: if false;
+
+      // CREATE: strict schema, key allowlist, ownership, and server timestamp bounds
+      allow create: if isSignedIn() &&
+                       isValidId(userId) &&
+                       request.auth.uid == userId &&
+                       incoming().keys().hasAll([
+                         'userId', 'fullName', 'email', 'phoneNumber',
+                         'address', 'city', 'state', 'petDetails',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'fullName', 'email', 'phoneNumber',
+                         'address', 'city', 'state', 'petDetails',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidUserProfile(incoming());
+
+      // UPDATE: validate projected state, keep userId and createdAt immutable, allowlist action mutations
+      allow update: if isSignedIn() &&
+                       isValidId(userId) &&
+                       request.auth.uid == userId &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       (
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'fullName', 'email', 'phoneNumber', 'address', 'city', 'state', 'updatedAt'
+                         ]) ||
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'petDetails', 'updatedAt'
+                         ]) ||
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'fullName', 'email', 'phoneNumber', 'address', 'city', 'state', 'petDetails', 'updatedAt'
+                         ])
+                       );
+
+      allow delete: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+    }
+  }
+}

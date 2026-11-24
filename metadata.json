@@ -1,0 +1,6 @@
+{
+  "name": "PawCare",
+  "description": "Pet Owner Management System with a public pet care homepage, Firebase Authentication, Cloud Firestore pet and owner profiles, and a personalized dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
